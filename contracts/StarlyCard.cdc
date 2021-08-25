@@ -12,12 +12,16 @@ pub contract StarlyCard: NonFungibleToken {
     pub event Deposit(id: UInt64, to: Address?)
     pub event Minted(id: UInt64, starlyID: String)
     pub event Burned(id: UInt64, starlyID: String)
+    pub event MinterCreated()
 
     // Named Paths
     //
     pub let CollectionStoragePath: StoragePath
     pub let CollectionPublicPath: PublicPath
+    pub let AdminStoragePath: StoragePath
     pub let MinterStoragePath: StoragePath
+    pub let MinterProxyStoragePath: StoragePath
+    pub let MinterProxyPublicPath: PublicPath
 
     // totalSupply
     // The total number of StarlyCard that have been minted
@@ -146,6 +150,22 @@ pub contract StarlyCard: NonFungibleToken {
         return <- create Collection()
     }
 
+    // fetch
+    // Get a reference to a StarlyCard from an account's Collection, if available.
+    // If an account does not have a StarlyCard.Collection, panic.
+    // If it has a collection but does not contain the itemID, return nil.
+    // If it has a collection and that collection contains the itemID, return a reference to that.
+    //
+    pub fun fetch(_ from: Address, itemID: UInt64): &StarlyCard.NFT? {
+        let collection = getAccount(from)
+            .getCapability(StarlyCard.CollectionPublicPath)!
+            .borrow<&StarlyCard.Collection{StarlyCard.StarlyCardCollectionPublic}>()
+            ?? panic("Couldn't get collection")
+        // We trust StarlyCard.Collection.borowStarlyCard to get the correct itemID
+        // (it checks it before returning it).
+        return collection.borrowStarlyCard(id: itemID)
+    }
+
     // NFTMinter
     // Resource that an admin or something similar would own to be
     // able to mint new NFTs
@@ -166,20 +186,53 @@ pub contract StarlyCard: NonFungibleToken {
 		}
 	}
 
-    // fetch
-    // Get a reference to a StarlyCard from an account's Collection, if available.
-    // If an account does not have a StarlyCard.Collection, panic.
-    // If it has a collection but does not contain the itemID, return nil.
-    // If it has a collection and that collection contains the itemID, return a reference to that.
+    pub resource interface MinterProxyPublic {
+        pub fun setMinterCapability(capability: Capability<&NFTMinter>)
+    }
+
+    // MinterProxy
     //
-    pub fun fetch(_ from: Address, itemID: UInt64): &StarlyCard.NFT? {
-        let collection = getAccount(from)
-            .getCapability(StarlyCard.CollectionPublicPath)!
-            .borrow<&StarlyCard.Collection{StarlyCard.StarlyCardCollectionPublic}>()
-            ?? panic("Couldn't get collection")
-        // We trust StarlyCard.Collection.borowStarlyCard to get the correct itemID
-        // (it checks it before returning it).
-        return collection.borrowStarlyCard(id: itemID)
+    // Resource object holding a capability that can be used to mint new NFTs.
+    // The resource that this capability represents can be deleted by the admin
+    // in order to unilaterally revoke minting capability if needed.
+    pub resource MinterProxy: MinterProxyPublic {
+
+        access(self) var minterCapability: Capability<&NFTMinter>?
+
+        pub fun setMinterCapability(capability: Capability<&NFTMinter>) {
+            self.minterCapability = capability
+        }
+
+        pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, starlyID: String) {
+            self.minterCapability!
+            .borrow()!
+            .mintNFT(recipient: recipient, starlyID: starlyID)
+        }
+
+        init() {
+            self.minterCapability = nil
+        }
+    }
+
+    // createMinterProxy
+    //
+    // Function that creates a MinterProxy.
+    // Anyone can call this, but the MinterProxy cannot mint without a NFTMinter capability,
+    // and only the admin can provide that.
+    //
+    pub fun createMinterProxy(): @MinterProxy {
+        return <- create MinterProxy()
+    }
+
+    // Administrator
+    //
+    // A resource that allows new minters to be created
+    pub resource Administrator {
+
+        pub fun createNewMinter(): @NFTMinter {
+            emit MinterCreated()
+            return <- create NFTMinter()
+        }
     }
 
     // initializer
@@ -188,13 +241,17 @@ pub contract StarlyCard: NonFungibleToken {
         // Set our named paths
         self.CollectionStoragePath = /storage/starlyCardCollection
         self.CollectionPublicPath = /public/starlyCardCollection
+        self.AdminStoragePath = /storage/starlyCardAdmin
         self.MinterStoragePath = /storage/starlyCardMinter
+        self.MinterProxyPublicPath = /public/starlyCardMinterProxy
+        self.MinterProxyStoragePath = /storage/starlyCardMinterProxy
 
         // Initialize the total supply
         self.totalSupply = 0
 
-        // Create a Minter resource and save it to storage
-        let minter <- create NFTMinter()
+        let admin <- create Administrator()
+        let minter <- admin.createNewMinter()
+        self.account.save(<-admin, to: self.AdminStoragePath)
         self.account.save(<-minter, to: self.MinterStoragePath)
 
         emit ContractInitialized()
