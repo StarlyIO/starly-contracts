@@ -27,6 +27,19 @@ pub contract StarlyCardMarket {
         }
     }
 
+    pub fun checkSaleCutReceiver(saleCutReceiver: StarlyCardMarket.SaleCutReceiver): Bool {
+        return saleCutReceiver.receiver.borrow() != nil
+    }
+
+    pub fun checkSaleCutReceivers(saleCutReceivers: [StarlyCardMarket.SaleCutReceiver]): Bool {
+        for saleCutReceiver in saleCutReceivers {
+            if (saleCutReceiver.receiver.borrow() != nil) {
+                return false
+            }
+        }
+        return true
+    }
+
     // SaleOffer events.
     //
     // A sale offer has been created.
@@ -186,14 +199,10 @@ pub contract StarlyCardMarket {
         ) {
             pre {
                 sellerItemProvider.borrow() != nil: "Cannot borrow seller"
-                sellerSaleCutReceiver.receiver.borrow() != nil: "Cannot borrow sellerPaymentReceiver"
-                beneficiarySaleCutReceiver.receiver.borrow() != nil: "Cannot borrow beneficiaryPaymentReceiver"
-                creatorSaleCutReceiver.receiver.borrow() != nil: "Cannot borrow creatorPaymentReceiver"
-            }
-
-            // TODO why this cannot be in pre phase?
-            for additionalSaleCutReceiver in additionalSaleCutReceivers {
-                additionalSaleCutReceiver.receiver.borrow() ?? panic("Cannot borrow additionalPaymentReceiver")
+                StarlyCardMarket.checkSaleCutReceiver(saleCutReceiver: sellerSaleCutReceiver): "Cannot borrow receiver in sellerSaleCutReceiver"
+                StarlyCardMarket.checkSaleCutReceiver(saleCutReceiver: beneficiarySaleCutReceiver): "Cannot borrow receiver in beneficiarySaleCutReceiver"
+                StarlyCardMarket.checkSaleCutReceiver(saleCutReceiver: creatorSaleCutReceiver): "Cannot borrow receiver in creatorSaleCutReceiver"
+                StarlyCardMarket.checkSaleCutReceivers(saleCutReceivers: additionalSaleCutReceivers): "Cannot borrow receiver in additionalSaleCutReceivers"
             }
 
             self.saleCompleted = false
