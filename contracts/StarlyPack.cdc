@@ -5,7 +5,7 @@ import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
 pub contract StarlyPack {
 
     // Since we are open to world, we need mechanism for securely selling packs to users without showing what is inside. StarlyPack.Purchased is an event that
-    // that server relies on when giving pack to user. It checks packIDs (user must previously reserve those), price, currect addresses and cuts. It is
+    // that server relies on when giving pack to user. It checks packIDs (user must previously reserve those), price, correct addresses and cuts. It is
     // easy to fabricate this events with malformed ids, prices and address. Server job is to check all that information before giving pack to user. If user uses
     // client app then there should be no problems -- packs reserved, royalties paid to correct addresses.
     //
@@ -31,13 +31,9 @@ pub contract StarlyPack {
 
         pre {
             paymentVault.balance == price: "payment does not equal offer price"
-            beneficiarySaleCutReceiver.receiver.borrow() != nil: "Cannot borrow beneficiaryPaymentReceiver"
-            creatorSaleCutReceiver.receiver.borrow() != nil: "Cannot borrow creatorPaymentReceiver"
-        }
-
-        // TODO why this cannot be in pre phase?
-        for additionalSaleCutReceiver in additionalSaleCutReceivers {
-            additionalSaleCutReceiver.receiver.borrow() ?? panic("Cannot borrow additionalPaymentReceiver")
+            StarlyCardMarket.checkSaleCutReceiver(saleCutReceiver: beneficiarySaleCutReceiver): "Cannot borrow receiver in beneficiarySaleCutReceiver"
+            StarlyCardMarket.checkSaleCutReceiver(saleCutReceiver: creatorSaleCutReceiver): "Cannot borrow receiver in creatorSaleCutReceiver"
+            StarlyCardMarket.checkSaleCutReceivers(saleCutReceivers: additionalSaleCutReceivers): "Cannot borrow receiver in additionalSaleCutReceivers"
         }
 
         let beneficiaryCutAmount = price * beneficiarySaleCutReceiver.percent
