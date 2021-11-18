@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/MintMe/starly-contracts/lib/go/scripts"
+	"github.com/StarlyIO/starly-contracts/lib/go/scripts"
 	"github.com/onflow/cadence"
 	jsoncdc "github.com/onflow/cadence/encoding/json"
 	"github.com/stretchr/testify/assert"

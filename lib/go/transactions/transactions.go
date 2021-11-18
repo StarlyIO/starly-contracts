@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MintMe/starly-contracts/lib/go/transactions/internal/assets"
+	"github.com/StarlyIO/starly-contracts/lib/go/transactions/internal/assets"
 )
 
 const (

@@ -1,7 +1,7 @@
 package transactions_test
 
 import (
-	"github.com/MintMe/starly-contracts/lib/go/transactions"
+	"github.com/StarlyIO/starly-contracts/lib/go/transactions"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

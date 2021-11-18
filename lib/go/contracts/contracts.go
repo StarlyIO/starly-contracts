@@ -4,7 +4,7 @@ package contracts
 
 import (
 	"fmt"
-	"github.com/MintMe/starly-contracts/lib/go/contracts/internal/assets"
+	"github.com/StarlyIO/starly-contracts/lib/go/contracts/internal/assets"
 	"strings"
 )
 

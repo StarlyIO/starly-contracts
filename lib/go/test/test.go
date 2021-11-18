@@ -2,9 +2,9 @@ package test
 
 import (
 	"fmt"
-	"github.com/MintMe/starly-contracts/lib/go/contracts"
-	"github.com/MintMe/starly-contracts/lib/go/scripts"
-	"github.com/MintMe/starly-contracts/lib/go/transactions"
+	"github.com/StarlyIO/starly-contracts/lib/go/contracts"
+	"github.com/StarlyIO/starly-contracts/lib/go/scripts"
+	"github.com/StarlyIO/starly-contracts/lib/go/transactions"
 	jsoncdc "github.com/onflow/cadence/encoding/json"
 	sdktemplates "github.com/onflow/flow-go-sdk/templates"
 	"github.com/onflow/flow-go-sdk/test"

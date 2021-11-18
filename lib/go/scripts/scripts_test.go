@@ -1,7 +1,7 @@
 package scripts_test
 
 import (
-	"github.com/MintMe/starly-contracts/lib/go/scripts"
+	"github.com/StarlyIO/starly-contracts/lib/go/scripts"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
