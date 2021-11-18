@@ -1,10 +1,15 @@
 package scripts_test
 
 import (
-	"github.com/StarlyIO/starly-contracts/lib/go/scripts"
+	"github.com/MintMe/starly-contracts/lib/go/scripts"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
+
+func TestReadFlowBalanceScript(t *testing.T) {
+	script := scripts.ReadFlowBalanceScript("0A", "0B")
+	assert.NotNil(t, script)
+}
 
 func TestReadFUSDBalanceScript(t *testing.T) {
 	script := scripts.ReadFUSDBalanceScript("0A", "0B")

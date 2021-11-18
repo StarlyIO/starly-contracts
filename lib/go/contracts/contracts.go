@@ -4,13 +4,14 @@ package contracts
 
 import (
 	"fmt"
-	"github.com/StarlyIO/starly-contracts/lib/go/contracts/internal/assets"
+	"github.com/MintMe/starly-contracts/lib/go/contracts/internal/assets"
 	"strings"
 )
 
 const (
 	fungibleTokenFilename    = "FungibleToken.cdc"
 	nonFungibleTokenFilename = "NonFungibleToken.cdc"
+	FlowTokenFilename        = "FlowToken.cdc"
 	FUSDFilename             = "FUSD.cdc"
 	StarlyCardFilename       = "StarlyCard.cdc"
 	StarlyCardMarketFilename = "StarlyCardMarket.cdc"
@@ -36,17 +37,26 @@ func withHexPrefix(address string) string {
 	return fmt.Sprintf("0x%s", address)
 }
 
-// FungibleToken returns the FungibleToken contract interface.
 func FungibleToken() []byte {
 	return assets.MustAsset(fungibleTokenFilename)
 }
 
-// NonFungibleToken returns the FungibleToken contract interface.
 func NonFungibleToken() []byte {
 	return assets.MustAsset(nonFungibleTokenFilename)
 }
 
-// FUSD returns the FUSD contract interface.
+func FlowToken(fungibleTokenAddress string) []byte {
+	code := assets.MustAssetString(FlowTokenFilename)
+
+	code = strings.ReplaceAll(
+		code,
+		defaultFungibleTokenAddress,
+		withHexPrefix(fungibleTokenAddress),
+	)
+
+	return []byte(code)
+}
+
 func FUSD(fungibleTokenAddress string) []byte {
 	code := assets.MustAssetString(FUSDFilename)
 
@@ -59,7 +69,6 @@ func FUSD(fungibleTokenAddress string) []byte {
 	return []byte(code)
 }
 
-// StarlyCard returns the StarlyCard contract interface.
 func StarlyCard(nonFungibleTokenAddress string) []byte {
 	code := assets.MustAssetString(StarlyCardFilename)
 
@@ -72,7 +81,6 @@ func StarlyCard(nonFungibleTokenAddress string) []byte {
 	return []byte(code)
 }
 
-// StarlyCard returns the StarlyCard contract interface.
 func StarlyCardMarket(
 	fungibleTokenAddress string,
 	nonFungibleTokenAddress string,
@@ -107,7 +115,6 @@ func StarlyCardMarket(
 	return []byte(code)
 }
 
-// StarlyPack returns the StarlyPack contract interface.
 func StarlyPack(
 	fungibleTokenAddress string,
 	fusdAddress string,

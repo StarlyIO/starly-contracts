@@ -10,12 +10,16 @@ transaction(
     beneficiaryAddress: Address,
     beneficiaryCutPercent: UFix64,
     creatorAddress: Address,
-    creatorCutPercent: UFix64) {
+    creatorCutPercent: UFix64,
+    additionalSaleCutsPercents: {Address: UFix64}) {
 
     let paymentVault: @FungibleToken.Vault
     let beneficiaryFUSDVault: Capability<&FUSD.Vault{FungibleToken.Receiver}>
     let creatorFUSDVault: Capability<&FUSD.Vault{FungibleToken.Receiver}>
     let buyerAddress: Address
+    let beneficiarySaleCutReceiver: StarlyCardMarket.SaleCutReceiver
+    let creatorSaleCutReceiver: StarlyCardMarket.SaleCutReceiver
+    let additionalSaleCutReceivers: [StarlyCardMarket.SaleCutReceiver]
 
     prepare(signer: AuthAccount) {
         self.buyerAddress = signer.address;
@@ -26,10 +30,22 @@ transaction(
         let beneficiary = getAccount(beneficiaryAddress);
         self.beneficiaryFUSDVault = beneficiary.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)!
         assert(self.beneficiaryFUSDVault.borrow() != nil, message: "Missing or mis-typed FUSD receiver (beneficiary)")
+        self.beneficiarySaleCutReceiver = StarlyCardMarket.SaleCutReceiver(receiver: self.beneficiaryFUSDVault, percent: beneficiaryCutPercent)
 
         let creator = getAccount(creatorAddress)
         self.creatorFUSDVault = creator.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)!
         assert(self.creatorFUSDVault.borrow() != nil, message: "Missing or mis-typed FUSD receiver (creator)")
+        self.creatorSaleCutReceiver = StarlyCardMarket.SaleCutReceiver(receiver: self.creatorFUSDVault, percent: creatorCutPercent)
+
+        self.additionalSaleCutReceivers = []
+        for address in additionalSaleCutsPercents.keys {
+            let additionalAccount = getAccount(address);
+            let additionalCutPercent = additionalSaleCutsPercents[address]!
+            let additionalFUSDVault = additionalAccount.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)!
+            assert(additionalFUSDVault.borrow() != nil, message: "Missing or mis-typed FUSD receiver (additional)")
+            let additionalSaleCutReceiver = StarlyCardMarket.SaleCutReceiver(receiver: additionalFUSDVault, percent: additionalCutPercent)
+            self.additionalSaleCutReceivers.append(additionalSaleCutReceiver)
+        }
     }
 
     execute {
@@ -39,12 +55,8 @@ transaction(
             price: price,
             buyerAddress: self.buyerAddress,
             paymentVault: <- self.paymentVault,
-            beneficiarySaleCutReceiver: StarlyCardMarket.SaleCutReceiver(
-                receiver: self.beneficiaryFUSDVault,
-                percent: beneficiaryCutPercent),
-            creatorSaleCutReceiver: StarlyCardMarket.SaleCutReceiver(
-                receiver: self.creatorFUSDVault,
-                percent: creatorCutPercent),
-            additionalSaleCutReceivers: [])
+            beneficiarySaleCutReceiver: self.beneficiarySaleCutReceiver,
+            creatorSaleCutReceiver: self.creatorSaleCutReceiver,
+            additionalSaleCutReceivers: self.additionalSaleCutReceivers)
     }
 }

@@ -2,9 +2,9 @@ package test
 
 import (
 	"fmt"
-	"github.com/StarlyIO/starly-contracts/lib/go/contracts"
-	"github.com/StarlyIO/starly-contracts/lib/go/scripts"
-	"github.com/StarlyIO/starly-contracts/lib/go/transactions"
+	"github.com/MintMe/starly-contracts/lib/go/contracts"
+	"github.com/MintMe/starly-contracts/lib/go/scripts"
+	"github.com/MintMe/starly-contracts/lib/go/transactions"
 	jsoncdc "github.com/onflow/cadence/encoding/json"
 	sdktemplates "github.com/onflow/flow-go-sdk/templates"
 	"github.com/onflow/flow-go-sdk/test"
@@ -67,6 +67,7 @@ type Environment struct {
 
 	fungibleTokenAddress    flow.Address
 	nonFungibleTokenAddress flow.Address
+	flowTokenAddress        flow.Address
 	fusdAddress             flow.Address
 	fusdAccountKey          *flow.AccountKey
 	fusdAccountSigner       crypto.Signer
@@ -75,6 +76,48 @@ type Environment struct {
 	starlyCardSigner        crypto.Signer
 	starlyCardMarketAddress flow.Address
 	starlyPackAddress       flow.Address
+}
+
+func (env Environment) TransferSystemFlow(address flow.Address, amount string) {
+	txCode := transactions.TransferFlowTransaction(
+		env.fungibleTokenAddress.String(),
+		env.flowTokenAddress.String(),
+	)
+	tx := createTxWithTemplateAndAuthorizer(env.b, txCode, env.fusdAddress)
+	_ = tx.AddArgument(cadence.Address(address))
+	_ = tx.AddArgument(CadenceUFix64(amount))
+
+	signAndSubmit(
+		env.t, env.b, tx,
+		[]flow.Address{
+			env.flowTokenAddress,
+		},
+		[]crypto.Signer{
+			env.b.ServiceKey().Signer(),
+		},
+		false,
+	)
+}
+
+func (env Environment) MintFlow(address flow.Address, amount string) {
+	txCode := transactions.MintFlowTransaction(
+		env.fungibleTokenAddress.String(),
+		env.flowTokenAddress.String(),
+	)
+	tx := createTxWithTemplateAndAuthorizer(env.b, txCode, env.b.ServiceKey().Address)
+	_ = tx.AddArgument(cadence.Address(address))
+	_ = tx.AddArgument(CadenceUFix64(amount))
+
+	signAndSubmit(
+		env.t, env.b, tx,
+		[]flow.Address{
+			env.b.ServiceKey().Address,
+		},
+		[]crypto.Signer{
+			env.b.ServiceKey().Signer(),
+		},
+		false,
+	)
 }
 
 func (env Environment) MintFUSD(address flow.Address, amount string) {
@@ -98,6 +141,14 @@ func (env Environment) MintFUSD(address flow.Address, amount string) {
 		},
 		false,
 	)
+}
+
+func (env Environment) GetFlowBalance(address flow.Address) cadence.Value {
+	scriptCode := scripts.ReadFlowBalanceScript(
+		env.fungibleTokenAddress.String(),
+		env.flowTokenAddress.String(),
+	)
+	return executeScriptAndCheck(env.t, env.b, scriptCode, [][]byte{jsoncdc.MustEncode(cadence.Address(address))})
 }
 
 func (env Environment) GetFUSDBalance(address flow.Address) cadence.Value {
@@ -345,6 +396,8 @@ func (env Environment) BuyPack(
 	beneficiaryCurPercent string,
 	creatorAddress flow.Address,
 	creatorCutPercent string,
+	additionalAddress flow.Address,
+	additionalCutPercent string,
 	authorizerAddress flow.Address,
 	authorizerSigner crypto.Signer) {
 	transaction := transactions.BuyStarlyPackTransaction(
@@ -368,6 +421,65 @@ func (env Environment) BuyPack(
 	_ = tx.AddArgument(cadence.Address(creatorAddress))
 	_ = tx.AddArgument(CadenceUFix64(creatorCutPercent))
 
+	additionalKeyPairs := make([]cadence.KeyValuePair, 1)
+	additionalKeyPairs[0] = cadence.KeyValuePair{
+		Key:   cadence.Address(additionalAddress),
+		Value: CadenceUFix64(additionalCutPercent)}
+	_ = tx.AddArgument(cadence.NewDictionary(additionalKeyPairs))
+
+	signAndSubmit(
+		env.t, env.b, tx,
+		[]flow.Address{
+			env.b.ServiceKey().Address,
+			authorizerAddress,
+		},
+		[]crypto.Signer{
+			env.b.ServiceKey().Signer(),
+			authorizerSigner,
+		},
+		false,
+	)
+}
+
+func (env Environment) BuyPackUsingFlow(
+	collectionID string,
+	packIDs []string,
+	price string,
+	beneficiaryAddress flow.Address,
+	beneficiaryCurPercent string,
+	creatorAddress flow.Address,
+	creatorCutPercent string,
+	additionalAddress flow.Address,
+	additionalCutPercent string,
+	authorizerAddress flow.Address,
+	authorizerSigner crypto.Signer) {
+	transaction := transactions.BuyStarlyPackFlowTransaction(
+		env.fungibleTokenAddress.String(),
+		env.flowTokenAddress.String(),
+		env.starlyCardMarketAddress.String(),
+		env.starlyPackAddress.String(),
+	)
+
+	var cadencePackIDs []cadence.Value
+	for _, packID := range packIDs {
+		cadencePackIDs = append(cadencePackIDs, cadence.String(packID)) // note the = instead of :=
+	}
+
+	tx := createTxWithTemplateAndAuthorizer(env.b, transaction, authorizerAddress)
+	_ = tx.AddArgument(cadence.String(collectionID))
+	_ = tx.AddArgument(cadence.NewArray(cadencePackIDs))
+	_ = tx.AddArgument(CadenceUFix64(price))
+	_ = tx.AddArgument(cadence.Address(beneficiaryAddress))
+	_ = tx.AddArgument(CadenceUFix64(beneficiaryCurPercent))
+	_ = tx.AddArgument(cadence.Address(creatorAddress))
+	_ = tx.AddArgument(CadenceUFix64(creatorCutPercent))
+
+	additionalKeyPairs := make([]cadence.KeyValuePair, 1)
+	additionalKeyPairs[0] = cadence.KeyValuePair{
+		Key:   cadence.Address(additionalAddress),
+		Value: CadenceUFix64(additionalCutPercent)}
+	_ = tx.AddArgument(cadence.NewDictionary(additionalKeyPairs))
+
 	signAndSubmit(
 		env.t, env.b, tx,
 		[]flow.Address{
@@ -386,8 +498,9 @@ func NewEnvironment(t *testing.T) Environment {
 	b := newBlockchain()
 	accountKeys := test.AccountKeyGenerator()
 
-	fungibleTokenAddress := deployFungibleTokenContract(t, b)
+	fungibleTokenAddress := flow.HexToAddress("ee82856bf20e2aa6")
 	nonFungibleTokenAddress := deployNonFungibleTokenContract(t, b)
+	flowTokenAddress := flow.HexToAddress("0ae53cb6e3f42a79")
 	fusdAddress, fusdAccountKey, fusdAccountSigner := deployFUSDContract(b, accountKeys, fungibleTokenAddress)
 	starlyCardAddress, starlyCardAccountKey, starlyCardAccountSigner := deployStarlyCardContract(b, accountKeys, nonFungibleTokenAddress)
 	starlyCardMarketAddress := deployStarlyCardMarketContract(
@@ -406,6 +519,7 @@ func NewEnvironment(t *testing.T) Environment {
 		accountKeys,
 		fungibleTokenAddress,
 		nonFungibleTokenAddress,
+		flowTokenAddress,
 		fusdAddress, fusdAccountKey, fusdAccountSigner,
 		starlyCardAddress, starlyCardAccountKey, starlyCardAccountSigner,
 		starlyCardMarketAddress,

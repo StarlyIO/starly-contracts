@@ -5,11 +5,16 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/StarlyIO/starly-contracts/lib/go/contracts"
+	"github.com/MintMe/starly-contracts/lib/go/contracts"
 )
 
 func TestFungibleTokenContract(t *testing.T) {
 	contract := contracts.FungibleToken()
+	assert.NotNil(t, contract)
+}
+
+func TestFlowTokenContract(t *testing.T) {
+	contract := contracts.FlowToken("0x0A")
 	assert.NotNil(t, contract)
 }
 

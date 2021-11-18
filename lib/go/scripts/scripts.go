@@ -4,11 +4,14 @@ package scripts
 
 import (
 	"fmt"
-	"github.com/StarlyIO/starly-contracts/lib/go/scripts/internal/assets"
+	"github.com/MintMe/starly-contracts/lib/go/scripts/internal/assets"
 	"strings"
 )
 
 const (
+
+    // Flow
+	readFlowBalanceFilename = "flow/read_balance.cdc"
 
 	// FUSD
 	readFUSDBalanceFilename = "fusd/read_balance.cdc"
@@ -25,6 +28,7 @@ const (
 
 	defaultFungibleTokenAddress    = "0xFUNGIBLETOKENADDRESS"
 	defaultNonFungibleTokenAddress = "0xNONFUNGIBLETOKENADDRESS"
+	defaultFlowTokenAddress        = "0xFLOWTOKENADDRESS"
 	defaultFUSDAddress             = "0xFUSDADDRESS"
 	defaultStarlyCardAddress       = "0xSTARLYCARDADDRESS"
 	defaultStarlyCardMarketAddress = "0xSTARLYCARDMARKETADDRESS"
@@ -40,6 +44,26 @@ func withHexPrefix(address string) string {
 	}
 
 	return fmt.Sprintf("0x%s", address)
+}
+
+func ReadFlowBalanceScript(
+	fungibleTokenAddress string,
+	flowTokenAddress string,
+) []byte {
+	code := assets.MustAssetString(readFlowBalanceFilename)
+
+	code = strings.ReplaceAll(
+		code,
+		defaultFungibleTokenAddress,
+		withHexPrefix(fungibleTokenAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultFlowTokenAddress,
+		withHexPrefix(flowTokenAddress),
+	)
+
+	return []byte(code)
 }
 
 func ReadFUSDBalanceScript(

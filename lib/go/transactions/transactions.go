@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StarlyIO/starly-contracts/lib/go/transactions/internal/assets"
+	"github.com/MintMe/starly-contracts/lib/go/transactions/internal/assets"
 )
 
 const (
 	defaultFungibleTokenAddress    = "0xFUNGIBLETOKENADDRESS"
 	defaultNonFungibleTokenAddress = "0xNONFUNGIBLETOKENADDRESS"
+	defaultFlowTokenAddress        = "0xFLOWTOKENADDRESS"
 	defaultFUSDAddress             = "0xFUSDADDRESS"
 	defaultStarlyCardAddress       = "0xSTARLYCARDADDRESS"
 	defaultStarlyCardMarketAddress = "0xSTARLYCARDMARKETADDRESS"
@@ -19,6 +20,10 @@ const (
 
 	// Common
 	setupAccountFilename = "setup_account.cdc"
+
+    // FLOW
+	mintFlowFilename = "flow/mint_tokens.cdc"
+	transferFlowFilename = "flow/transfer.cdc"
 
 	// FUSD
 	mintFUSDFilename = "fusd/mint_tokens.cdc"
@@ -37,6 +42,7 @@ const (
 
 	// StarlyPack
 	buyStarlyPackFilename = "starlyPack/buy_pack.cdc"
+	buyStarlyPackFlowFilename = "starlyPack/buy_pack_flow.cdc"
 )
 
 func withHexPrefix(address string) string {
@@ -85,6 +91,46 @@ func SetupAccountTransaction(
 		code,
 		defaultStarlyCardMarketAddress,
 		withHexPrefix(starlyCardMarketAddress),
+	)
+
+	return []byte(code)
+}
+
+func TransferFlowTransaction(
+	fungibleTokenAddress string,
+	flowTokenAddress string,
+) []byte {
+	code := assets.MustAssetString(transferFlowFilename)
+
+	code = strings.ReplaceAll(
+		code,
+		defaultFungibleTokenAddress,
+		withHexPrefix(fungibleTokenAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultFlowTokenAddress,
+		withHexPrefix(flowTokenAddress),
+	)
+
+	return []byte(code)
+}
+
+func MintFlowTransaction(
+	fungibleTokenAddress string,
+	flowTokenAddress string,
+) []byte {
+	code := assets.MustAssetString(mintFlowFilename)
+
+	code = strings.ReplaceAll(
+		code,
+		defaultFungibleTokenAddress,
+		withHexPrefix(fungibleTokenAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultFlowTokenAddress,
+		withHexPrefix(flowTokenAddress),
 	)
 
 	return []byte(code)
@@ -317,6 +363,38 @@ func BuyStarlyPackTransaction(
 		code,
 		defaultFUSDAddress,
 		withHexPrefix(fusdAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultStarlyCardMarketAddress,
+		withHexPrefix(starlyCardMarketAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultStarlyCardPackAddress,
+		withHexPrefix(starlyPackAddress),
+	)
+
+	return []byte(code)
+}
+
+func BuyStarlyPackFlowTransaction(
+	fungibleTokenAddress string,
+	flowTokenAddress string,
+	starlyCardMarketAddress string,
+	starlyPackAddress string,
+) []byte {
+	code := assets.MustAssetString(buyStarlyPackFlowFilename)
+
+	code = strings.ReplaceAll(
+		code,
+		defaultFungibleTokenAddress,
+		withHexPrefix(fungibleTokenAddress),
+	)
+	code = strings.ReplaceAll(
+		code,
+		defaultFlowTokenAddress,
+		withHexPrefix(flowTokenAddress),
 	)
 	code = strings.ReplaceAll(
 		code,
