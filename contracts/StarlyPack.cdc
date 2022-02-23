@@ -1,6 +1,6 @@
-import FungibleToken from 0xFUNGIBLETOKENADDRESS
-import FUSD from 0xFUSDADDRESS
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import FUSD from "./FUSD.cdc"
+import FungibleToken from "./FungibleToken.cdc"
+import StarlyCardMarket from "./StarlyCardMarket.cdc"
 
 pub contract StarlyPack {
 

@@ -1,7 +1,7 @@
-import FungibleToken from 0xFUNGIBLETOKENADDRESS
-import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
-import FUSD from 0xFUSDADDRESS
-import StarlyCard from 0xSTARLYCARDADDRESS
+import FUSD from "./FUSD.cdc"
+import StarlyCard from "./StarlyCard.cdc"
+import FungibleToken from "./FungibleToken.cdc"
+import NonFungibleToken from "./NonFungibleToken.cdc"
 
 pub contract StarlyCardMarket {
 

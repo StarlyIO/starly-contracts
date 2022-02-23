@@ -1,0 +1,153 @@
+{
+  "emulators": {
+    "default": {
+      "port": 3569,
+      "serviceAccount": "emulator-account"
+    }
+  },
+  "contracts": {
+    "FlowToken": {
+      "source": "./contracts/FlowToken.cdc",
+      "aliases": {
+        "emulator": "0x0ae53cb6e3f42a79",
+        "testnet": "0x7e60df042a9c0868"
+      }
+    },
+    "FungibleToken": {
+      "source": "./contracts/FungibleToken.cdc",
+      "aliases": {
+        "emulator": "0xee82856bf20e2aa6",
+        "testnet": "0x9a0766d93b6608b7",
+        "mainnet": "0xf233dcee88fe0abe"
+      }
+    },
+    "FUSD": {
+      "source": "./contracts/FUSD.cdc",
+      "aliases": {
+        "testnet": "0xe223d8a629e49c68",
+        "mainnet": "0x3c5959b568896393"
+      }
+    },
+    "MetadataViews": {
+      "source": "./contracts/MetadataViews.cdc",
+      "aliases": {
+        "testnet": "0x631e88ae7f1d7c20",
+        "mainnet": "0x1d7e57aa55817448"
+      }
+    },
+    "NonFungibleToken": {
+      "source": "./contracts/NonFungibleToken.cdc",
+      "aliases": {
+        "testnet": "0x631e88ae7f1d7c20",
+        "mainnet": "0x1d7e57aa55817448"
+      }
+    },
+    "StarlyCard": {
+      "source": "./contracts/StarlyCard.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyCardMarket": {
+      "source": "./contracts/StarlyCardMarket.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyCollectorScore": {
+      "source": "./contracts/StarlyCollectorScore.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyIDParser": {
+      "source": "./contracts/StarlyIDParser.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyMetadata": {
+      "source": "./contracts/StarlyMetadata.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyMetadataViews": {
+      "source": "./contracts/StarlyMetadataViews.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyPack": {
+      "source": "./contracts/StarlyPack.cdc",
+      "aliases": {
+        "testnet": "0x697d72a988a77070",
+        "mainnet": "0x5b82f21c0edf76e3"
+      }
+    }
+  },
+  "networks": {
+    "emulator": {
+      "host": "127.0.0.1:3569",
+      "chain": "flow-emulator"
+    },
+    "mainnet": {
+      "host": "access.mainnet.nodes.onflow.org:9000",
+      "chain": "flow-mainnet"
+    },
+    "testnet": {
+      "host": "access.devnet.nodes.onflow.org:9000",
+      "chain": "flow-testnet"
+    }
+  },
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "keys": "4c13162bd35758146b7908ddb3a1d001dbe961ec422f96045524a0099e9ff083",
+      "chain": "flow-emulator"
+    },
+    "testnet-account": {
+      "address": "f8d6e0586b0a20c7",
+      "keys": "4c13162bd35758146b7908ddb3a1d001dbe961ec422f96045524a0099e9ff083",
+      "chain": "flow-emulator"
+    }
+  },
+  "devWallet": {
+    "accessNode": {
+      "endpoint": "http://localhost:8080"
+    },
+    "port": 8701
+  },
+  "deployments": {
+    "emulator": {
+      "emulator-account": [
+        "FUSD",
+        "MetadataViews",
+        "NonFungibleToken",
+        "StarlyCard",
+        "StarlyCardMarket",
+        "StarlyCollectorScore",
+        "StarlyIDParser",
+        "StarlyMetadata",
+        "StarlyMetadataViews",
+        "StarlyPack"
+      ]
+    },
+    "testnet": {
+      "testnet-account": [
+        "StarlyCard",
+        "StarlyCardMarket",
+        "StarlyIDParser",
+        "StarlyMetadata",
+        "StarlyMetadataViews",
+        "StarlyPack"
+      ]
+    }
+  }
+}
