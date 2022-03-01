@@ -1,4 +1,4 @@
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
 
 // This script returns an array of all the NFT IDs for sale
 // in an account's SaleOffer collection.

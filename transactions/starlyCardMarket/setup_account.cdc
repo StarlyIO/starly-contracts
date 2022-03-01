@@ -1,4 +1,4 @@
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
 
 // This transaction configures an account to hold SaleOffer items.
 

@@ -10,13 +10,13 @@ import (
 )
 
 const (
-	defaultFungibleTokenAddress    = "0xFUNGIBLETOKENADDRESS"
-	defaultNonFungibleTokenAddress = "0xNONFUNGIBLETOKENADDRESS"
-	defaultFlowTokenAddress        = "0xFLOWTOKENADDRESS"
-	defaultFUSDAddress             = "0xFUSDADDRESS"
-	defaultStarlyCardAddress       = "0xSTARLYCARDADDRESS"
-	defaultStarlyCardMarketAddress = "0xSTARLYCARDMARKETADDRESS"
-	defaultStarlyCardPackAddress   = "0xSTARLYPACKADDRESS"
+	defaultFungibleTokenAddress    = "../../contracts/FungibleToken.cdc"
+	defaultNonFungibleTokenAddress = "../../contracts/NonFungibleToken.cdc"
+	defaultFlowTokenAddress        = "../../contracts/FlowToken.cdc"
+	defaultFUSDAddress             = "../../contracts/FUSD.cdcADDRESS"
+	defaultStarlyCardAddress       = "../../contracts/StarlyCard.cdc"
+	defaultStarlyCardMarketAddress = "../../contracts/StarlyCardMarket.cdc"
+	defaultStarlyCardPackAddress   = "../../contracts/StarlyPack.cdc"
 
 	// Common
 	setupAccountFilename = "setup_account.cdc"

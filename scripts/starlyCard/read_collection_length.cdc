@@ -1,5 +1,5 @@
-import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
-import StarlyCard from 0xSTARLYCARDADDRESS
+import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
+import StarlyCard from "../../contracts/StarlyCard.cdc"
 
 // This script returns the size of an account's StarlyCard collection.
 

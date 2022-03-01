@@ -1,7 +1,7 @@
-import FungibleToken from 0xFUNGIBLETOKENADDRESS
-import FlowToken from 0xFLOWTOKENADDRESS
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
-import StarlyPack from 0xSTARLYPACKADDRESS
+import FungibleToken from "../../contracts/FungibleToken.cdc"
+import FlowToken from "../../contracts/FlowToken.cdc"
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
+import StarlyPack from "../../contracts/StarlyPack.cdc"
 
 transaction(
     collectionID: String,

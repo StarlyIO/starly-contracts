@@ -1,8 +1,8 @@
-import FungibleToken from 0xFUNGIBLETOKENADDRESS
-import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
-import FUSD from 0xFUSDADDRESS
-import StarlyCard from 0xSTARLYCARDADDRESS
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import FungibleToken from "../../contracts/FungibleToken.cdc"
+import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
+import FUSD from "../../contracts/FUSD.cdc"
+import StarlyCard from "../../contracts/StarlyCard.cdc"
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
 
 transaction(itemID: UInt64, marketCollectionAddress: Address) {
     let paymentVault: @FungibleToken.Vault

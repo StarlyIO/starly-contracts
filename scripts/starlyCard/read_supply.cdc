@@ -1,4 +1,4 @@
-import StarlyCard from 0xSTARLYCARDADDRESS
+import StarlyCard from "../../contracts/StarlyCard.cdc"
 
 // This scripts returns the number of StarlyCard currently in existence.
 

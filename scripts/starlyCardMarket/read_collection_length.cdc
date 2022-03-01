@@ -1,4 +1,4 @@
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
 
 // This script returns the size of an account's SaleOffer collection.
 

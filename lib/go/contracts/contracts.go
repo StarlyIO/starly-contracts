@@ -17,12 +17,12 @@ const (
 	StarlyCardMarketFilename = "StarlyCardMarket.cdc"
 	StarlyPackFilename       = "StarlyPack.cdc"
 
-	defaultFungibleTokenAddress    = "0xFUNGIBLETOKENADDRESS"
-	defaultNonFungibleTokenAddress = "0xNONFUNGIBLETOKENADDRESS"
-	defaultFUSDAddress             = "0xFUSDADDRESS"
-	defaultStarlyCardAddress       = "0xSTARLYCARDADDRESS"
-	defaultStarlyCardMarketAddress = "0xSTARLYCARDMARKETADDRESS"
-	defaultStarlyCardPackAddress   = "0xSTARLYPACKADDRESS"
+	defaultFungibleTokenAddress    = "../../contracts/FungibleToken.cdc"
+	defaultNonFungibleTokenAddress = "../../contracts/NonFungibleToken.cdc"
+	defaultFUSDAddress             = "../../contracts/FUSD.cdcADDRESS"
+	defaultStarlyCardAddress       = "../../contracts/StarlyCard.cdc"
+	defaultStarlyCardMarketAddress = "../../contracts/StarlyCardMarket.cdc"
+	defaultStarlyCardPackAddress   = "../../contracts/StarlyPack.cdc"
 )
 
 func withHexPrefix(address string) string {

@@ -26,12 +26,12 @@ const (
 	readStarlyCardMarketCollectionIdsFilename    = "starlyCardMarket/read_collection_ids.cdc"
 	readStarlyCardMarketCollectionLengthFilename = "starlyCardMarket/read_collection_length.cdc"
 
-	defaultFungibleTokenAddress    = "0xFUNGIBLETOKENADDRESS"
-	defaultNonFungibleTokenAddress = "0xNONFUNGIBLETOKENADDRESS"
-	defaultFlowTokenAddress        = "0xFLOWTOKENADDRESS"
-	defaultFUSDAddress             = "0xFUSDADDRESS"
-	defaultStarlyCardAddress       = "0xSTARLYCARDADDRESS"
-	defaultStarlyCardMarketAddress = "0xSTARLYCARDMARKETADDRESS"
+	defaultFungibleTokenAddress    = "../../contracts/FungibleToken.cdc"
+	defaultNonFungibleTokenAddress = "../../contracts/NonFungibleToken.cdc"
+	defaultFlowTokenAddress        = "../../contracts/FlowToken.cdc"
+	defaultFUSDAddress             = "../../contracts/FUSD.cdcADDRESS"
+	defaultStarlyCardAddress       = "../../contracts/StarlyCard.cdc"
+	defaultStarlyCardMarketAddress = "../../contracts/StarlyCardMarket.cdc"
 )
 
 func withHexPrefix(address string) string {

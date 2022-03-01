@@ -1,4 +1,4 @@
-import StarlyCard from 0xSTARLYCARDADDRESS
+import StarlyCard from "../../contracts/StarlyCard.cdc"
 
 transaction {
 

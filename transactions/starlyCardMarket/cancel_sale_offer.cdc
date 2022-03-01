@@ -1,4 +1,4 @@
-import StarlyCardMarket from 0xSTARLYCARDMARKETADDRESS
+import StarlyCardMarket from "../../contracts/StarlyCardMarket.cdc"
 
 transaction(itemID: UInt64) {
     let marketCollection: &StarlyCardMarket.Collection

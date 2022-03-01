@@ -1,5 +1,5 @@
-import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
-import StarlyCard from 0xSTARLYCARDADDRESS
+import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
+import StarlyCard from "../../contracts/StarlyCard.cdc"
 
 // This script returns an array of all the NFT IDs in an account's collection.
 
