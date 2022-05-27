@@ -104,7 +104,7 @@ pub contract StarlyMetadataViews {
         pub let collection: Collection
         pub let card: Card
         pub let edition: UInt32
-        pub let score: UInt32?
+        pub let score: UFix64?
         pub let url: String
         pub let previewUrl: String
 
@@ -112,7 +112,7 @@ pub contract StarlyMetadataViews {
             collection: Collection,
             card: Card,
             edition: UInt32,
-            score: UInt32?,
+            score: UFix64?,
             url: String,
             previewUrl: String) {
 

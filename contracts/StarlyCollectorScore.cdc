@@ -30,7 +30,7 @@ pub contract StarlyCollectorScore {
         edition: UInt32,
         editions: UInt32,
         priceCoefficient: UFix64
-    ): UInt32? {
+    ): UFix64? {
         let collectionConfig = self.configs[collectionID] ?? self.configs["default"] ?? panic("No score config found")
         let rarityConfig = collectionConfig[rarity] ?? panic("No rarity config")
 
@@ -49,7 +49,7 @@ pub contract StarlyCollectorScore {
             editionScore = rarityConfig.rest
         }
 
-        return UInt32(UFix64(editionScore) * priceCoefficient)
+        return UFix64(editionScore) * priceCoefficient
     }
 
     pub resource interface IEditor {

@@ -6,6 +6,20 @@
     }
   },
   "contracts": {
+    "CompoundInterest": {
+      "source": "./contracts/CompoundInterest.cdc",
+      "aliases": {
+        "testnet": "0x8d1cf508d398c5c2",
+        "mainnet": "0x76a9b420a331b9f0"
+      }
+    },
+    "FlowSwapPair": {
+      "source": "./contracts/FlowSwapPair.cdc",
+      "aliases": {
+        "testnet": "0xd9854329b7edf136",
+        "mainnet": "0xc6c77b9f5c7a378f"
+      }
+    },
     "FlowToken": {
       "source": "./contracts/FlowToken.cdc",
       "aliases": {
@@ -28,6 +42,13 @@
         "mainnet": "0x3c5959b568896393"
       }
     },
+    "FusdUsdtSwapPair": {
+      "source": "./contracts/FusdUsdtSwapPair.cdc",
+      "aliases": {
+        "testnet": "0x3502a5dacaf350bb",
+        "mainnet": "0x87f3f233f34b0733"
+      }
+    },
     "MetadataViews": {
       "source": "./contracts/MetadataViews.cdc",
       "aliases": {
@@ -42,6 +63,13 @@
         "mainnet": "0x1d7e57aa55817448"
       }
     },
+    "StakedStarlyCard": {
+      "source": "./contracts/StakedStarlyCard.cdc",
+      "aliases": {
+        "testnet": "0x298d34aafc724fe8",
+        "mainnet": "0x29fcd0b5e444242a"
+      }
+    },
     "StarlyCard": {
       "source": "./contracts/StarlyCard.cdc",
       "aliases": {
@@ -54,6 +82,20 @@
       "aliases": {
         "testnet": "0x697d72a988a77070",
         "mainnet": "0x5b82f21c0edf76e3"
+      }
+    },
+    "StarlyCardStaking": {
+      "source": "./contracts/StarlyCardStaking.cdc",
+      "aliases": {
+        "testnet": "0x298d34aafc724fe8",
+        "mainnet": "0x29fcd0b5e444242a"
+      }
+    },
+    "StarlyCardStakingClaims": {
+      "source": "./contracts/StarlyCardStakingClaims.cdc",
+      "aliases": {
+        "testnet": "0x298d34aafc724fe8",
+        "mainnet": "0x29fcd0b5e444242a"
       }
     },
     "StarlyCollectorScore": {
@@ -90,6 +132,34 @@
         "testnet": "0x697d72a988a77070",
         "mainnet": "0x5b82f21c0edf76e3"
       }
+    },
+    "StarlyToken": {
+      "source": "./contracts/StarlyToken.cdc",
+      "aliases": {
+        "testnet": "0xf63219072aaddd50",
+        "mainnet": "0x142fa6570b62fd97"
+      }
+    },
+    "StarlyTokenStaking": {
+      "source": "./contracts/StarlyTokenStaking.cdc",
+      "aliases": {
+        "testnet": "0x8d1cf508d398c5c2",
+        "mainnet": "0x76a9b420a331b9f0"
+      }
+    },
+    "StarlyTokenVesting": {
+      "source": "./contracts/StarlyTokenVesting.cdc",
+      "aliases": {
+        "testnet": "0xd2af9f588d53759d",
+        "mainnet": "0xee2f049f0ba04f0e"
+      }
+    },
+    "TeleportedTetherToken": {
+      "source": "./contracts/TeleportedTetherToken.cdc",
+      "aliases": {
+        "testnet": "0xab26e0a07d770ec1",
+        "mainnet": "0xcfdd90d4a00f7b5b"
+      }
     }
   },
   "networks": {
@@ -118,16 +188,26 @@
   "deployments": {
     "emulator": {
       "emulator-account": [
+        "CompoundInterest",
+        "FlowSwapPair",
+        "FusdUsdtSwapPair",
         "FUSD",
         "MetadataViews",
         "NonFungibleToken",
+        "StakedStarlyCard",
         "StarlyCard",
         "StarlyCardMarket",
+        "StarlyCardStaking",
+        "StarlyCardStakingClaims",
         "StarlyCollectorScore",
         "StarlyIDParser",
         "StarlyMetadata",
         "StarlyMetadataViews",
-        "StarlyPack"
+        "StarlyPack",
+        "StarlyToken",
+        "StarlyTokenStaking",
+        "StarlyTokenVesting",
+        "TeleportedTetherToken"
       ]
     },
     "testnet": {
