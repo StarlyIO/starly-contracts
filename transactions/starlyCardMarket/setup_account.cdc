@@ -10,7 +10,7 @@ transaction {
 
             // create a new empty collection
             let collection <- StarlyCardMarket.createEmptyCollection() as! @StarlyCardMarket.Collection
-
+            
             // save it to the account
             signer.save(<-collection, to: StarlyCardMarket.CollectionStoragePath)
 

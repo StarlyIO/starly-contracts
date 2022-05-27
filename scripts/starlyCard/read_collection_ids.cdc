@@ -8,6 +8,6 @@ pub fun main(address: Address): [UInt64] {
 
     let collectionRef = account.getCapability(StarlyCard.CollectionPublicPath)!.borrow<&{NonFungibleToken.CollectionPublic}>()
         ?? panic("Could not borrow capability from public collection")
-
+    
     return collectionRef.getIDs()
 }
