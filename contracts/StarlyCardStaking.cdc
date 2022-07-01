@@ -12,6 +12,10 @@ pub contract StarlyCardStaking {
         init(editions: {String: UFix64}) {
             self.editions = editions
         }
+
+        pub fun setRemainingResource(starlyID: String, remainingResource: UFix64) {
+            self.editions.insert(key: starlyID, remainingResource)
+        }
     }
 
     access(contract) var collections: {String: CollectionData}
@@ -43,7 +47,7 @@ pub contract StarlyCardStaking {
     pub resource Editor: IEditor {
         pub fun setRemainingResource(collectionID: String, starlyID: String, remainingResource: UFix64) {
             if let collection = StarlyCardStaking.collections[collectionID] {
-                StarlyCardStaking.collections[collectionID]!.editions.insert(key: starlyID, remainingResource)
+                StarlyCardStaking.collections[collectionID]!.setRemainingResource(starlyID: starlyID, remainingResource: remainingResource)
             } else {
                 StarlyCardStaking.collections.insert(key: collectionID, CollectionData(editions: {starlyID: remainingResource}))
             }

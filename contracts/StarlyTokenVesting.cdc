@@ -443,17 +443,17 @@ pub contract StarlyTokenVesting: NonFungibleToken {
         }
 
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-            return &self.ownedNFTs[id] as &NonFungibleToken.NFT
+            return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
         }
 
         pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
-            let nft = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
+            let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
             let vesting = nft as! &StarlyTokenVesting.NFT
             return vesting as &AnyResource{MetadataViews.Resolver}
         }
 
         pub fun borrowVestingPublic(id: UInt64): &StarlyTokenVesting.NFT{StarlyTokenVesting.VestingPublic, NonFungibleToken.INFT} {
-            let vestingRef = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
+            let vestingRef = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
             let intermediateRef = vestingRef as! auth &StarlyTokenVesting.NFT
             return intermediateRef as &StarlyTokenVesting.NFT{StarlyTokenVesting.VestingPublic, NonFungibleToken.INFT}
         }
@@ -465,7 +465,7 @@ pub contract StarlyTokenVesting: NonFungibleToken {
         }
 
         pub fun borrowVestingPrivate(id: UInt64): &StarlyTokenVesting.NFT {
-            let vestingRef = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
+            let vestingRef = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
             return vestingRef as! &StarlyTokenVesting.NFT
         }
     }

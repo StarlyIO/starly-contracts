@@ -59,13 +59,13 @@ pub contract StarlyMetadataViews {
         pub let previewUrl: String
 
         init(
-            id: UInt32
-            title: String
-            description: String
-            editions: UInt32
-            rarity: String
-            mediaType: String
-            mediaSizes: [MediaSize]
+            id: UInt32,
+            title: String,
+            description: String,
+            editions: UInt32,
+            rarity: String,
+            mediaType: String,
+            mediaSizes: [MediaSize],
             url: String,
             previewUrl: String) {
 

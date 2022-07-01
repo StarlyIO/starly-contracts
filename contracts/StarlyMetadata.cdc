@@ -16,6 +16,14 @@ pub contract StarlyMetadata {
             self.collection = collection
             self.cards = cards
         }
+
+        pub fun insertCard(cardID: UInt32, card: StarlyMetadataViews.Card) {
+            self.cards.insert(key: cardID, card)
+        }
+
+        pub fun removeCard(cardID: UInt32) {
+            self.cards.remove(key: cardID)
+        }
     }
 
     access(contract) var metadata: {String: CollectionMetadata}
@@ -91,7 +99,7 @@ pub contract StarlyMetadata {
 
     pub resource Editor: IEditor {
         pub fun putCollectionCard(collectionID: String, cardID: UInt32, card: StarlyMetadataViews.Card) {
-            StarlyMetadata.metadata[collectionID]?.cards?.insert(key: cardID, card)
+            StarlyMetadata.metadata[collectionID]?.insertCard(cardID: cardID, card: card)
         }
 
         pub fun putMetadata(collectionID: String, metadata: CollectionMetadata) {
@@ -99,7 +107,7 @@ pub contract StarlyMetadata {
         }
 
         pub fun deleteCollectionCard(collectionID: String, cardID: UInt32) {
-            StarlyMetadata.metadata[collectionID]?.cards?.remove(key: cardID)
+            StarlyMetadata.metadata[collectionID]?.removeCard(cardID: cardID)
         }
 
         pub fun deleteMetadata(collectionID: String) {

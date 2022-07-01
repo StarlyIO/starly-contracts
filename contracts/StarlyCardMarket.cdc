@@ -408,7 +408,7 @@ pub contract StarlyCardMarket {
             if self.saleOffers[itemID] == nil {
                 return nil
             } else {
-                return &self.saleOffers[itemID] as &SaleOffer{SaleOfferPublicView}
+                return (&self.saleOffers[itemID] as &SaleOffer{SaleOfferPublicView}?)!
             }
         }
 

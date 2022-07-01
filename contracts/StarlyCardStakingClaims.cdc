@@ -93,7 +93,7 @@ pub contract StarlyCardStakingClaims {
             .borrow<&{StakedStarlyCard.CollectionPublic, NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not borrow capability from public StarlyTokenStaking collection!")
 
-        let userRecentClaims = &self.recentClaims[address] as &RecentClaims
+        let userRecentClaims = (&self.recentClaims[address] as &RecentClaims?)!
 
         let currentTimestamp = getCurrentBlock().timestamp
         var payoutAmount = 0.0
@@ -146,7 +146,7 @@ pub contract StarlyCardStakingClaims {
         if !self.recentClaims.containsKey(address) {
             return 0.0
         } else {
-            let userRecentClaims = &self.recentClaims[address] as &RecentClaims
+            let userRecentClaims = (&self.recentClaims[address] as &RecentClaims?)!
             return userRecentClaims.getClaimedAmount()
         }
     }
