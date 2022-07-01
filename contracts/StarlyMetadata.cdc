@@ -36,6 +36,8 @@ pub contract StarlyMetadata {
     pub fun getViews(): [Type] {
         return [
             Type<MetadataViews.Display>(),
+            Type<MetadataViews.Edition>(),
+            Type<MetadataViews.ExternalURL>(),
             Type<StarlyMetadataViews.CardEdition>()
         ];
     }
@@ -44,6 +46,12 @@ pub contract StarlyMetadata {
         switch view {
             case Type<MetadataViews.Display>():
                 return self.getDisplay(starlyID: starlyID);
+            case Type<MetadataViews.Edition>():
+                return self.getEdition(starlyID: starlyID);
+            case Type<MetadataViews.ExternalURL>():
+                return self.getExternalURL(starlyID: starlyID);
+            case Type<MetadataViews.Traits>():
+                return self.getTraits(starlyID: starlyID);
             case Type<StarlyMetadataViews.CardEdition>():
                 return self.getCardEdition(starlyID: starlyID);
         }
@@ -62,6 +70,53 @@ pub contract StarlyMetadata {
                 description: cardEdition.card.description,
                 thumbnail: MetadataViews.HTTPFile(url: cardEdition.card.mediaSizes[0]!.url)
             )
+        }
+        return nil
+    }
+
+    pub fun getEdition(starlyID: String): MetadataViews.Edition? {
+        if let cardEdition = self.getCardEdition(starlyID: starlyID) {
+            let card = cardEdition.card
+            let edition = cardEdition.edition
+            let editions = card.editions
+            return MetadataViews.Edition(
+                name: "Card",
+                number: UInt64(edition),
+                max: UInt64(editions)
+            )
+        }
+        return nil
+    }
+
+    pub fun getExternalURL(starlyID: String): MetadataViews.ExternalURL? {
+        if let cardEdition = self.getCardEdition(starlyID: starlyID) {
+            return MetadataViews.ExternalURL(
+                url: cardEdition.url
+            )
+        }
+        return nil
+    }
+
+    pub fun getTraits(starlyID: String): MetadataViews.Traits? {
+        if let cardEdition = self.getCardEdition(starlyID: starlyID) {
+            let collection = cardEdition.collection
+            let creator = collection.creator
+            let card = cardEdition.card
+            return MetadataViews.Traits([
+                MetadataViews.Trait(name:"Name", value: card.title, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Description", value: card.description, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Rarity", value: card.rarity, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Collection (Name)", value: collection.title, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Collection (URL)", value: collection.url, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Creator (Name)", value: creator.name, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Creator (Username)", value: creator.username, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Creator (URL)", value: creator.url, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Edition", value: cardEdition.edition, displayType: "Numeric", rarity: nil),
+                MetadataViews.Trait(name:"Editions", value: card.editions, displayType: "Numeric", rarity: nil),
+                MetadataViews.Trait(name:"Collector Score", value: cardEdition.score ?? 0.0, displayType: "Numeric", rarity: nil),
+                MetadataViews.Trait(name:"URL", value: cardEdition.url, displayType: "String", rarity: nil),
+                MetadataViews.Trait(name:"Preview URL", value: cardEdition.previewUrl, displayType: "String", rarity: nil)
+            ])
         }
         return nil
     }
