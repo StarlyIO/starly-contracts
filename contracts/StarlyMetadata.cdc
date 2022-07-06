@@ -38,6 +38,7 @@ pub contract StarlyMetadata {
             Type<MetadataViews.Display>(),
             Type<MetadataViews.Edition>(),
             Type<MetadataViews.ExternalURL>(),
+            Type<MetadataViews.Traits>(),
             Type<StarlyMetadataViews.CardEdition>()
         ];
     }
