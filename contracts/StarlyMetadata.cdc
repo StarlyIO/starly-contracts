@@ -39,6 +39,8 @@ pub contract StarlyMetadata {
             Type<MetadataViews.Edition>(),
             Type<MetadataViews.ExternalURL>(),
             Type<MetadataViews.Traits>(),
+            Type<MetadataViews.NFTCollectionDisplay>(),
+            Type<MetadataViews.NFTCollectionData>(),
             Type<StarlyMetadataViews.CardEdition>()
         ];
     }
@@ -53,6 +55,9 @@ pub contract StarlyMetadata {
                 return self.getExternalURL(starlyID: starlyID);
             case Type<MetadataViews.Traits>():
                 return self.getTraits(starlyID: starlyID);
+            case Type<MetadataViews.NFTCollectionDisplay>():
+                return self.getNFTCollectionDisplay();
+            // case Type<MetadataViews.NFTCollectionData>(): implemented in StarlytCard
             case Type<StarlyMetadataViews.CardEdition>():
                 return self.getCardEdition(starlyID: starlyID);
         }
@@ -120,6 +125,29 @@ pub contract StarlyMetadata {
             ])
         }
         return nil
+    }
+
+    pub fun getNFTCollectionDisplay(): MetadataViews.NFTCollectionDisplay {
+        return MetadataViews.NFTCollectionDisplay(
+            name: "Starly",
+            description: "Starly is a launchpad and marketplace for gamified NFT collections on Flow.",
+            externalURL: MetadataViews.ExternalURL("https://starly.io"),
+            squareImage: MetadataViews.Media(
+                file: MetadataViews.HTTPFile(
+                    url: "https://storage.googleapis.com/starly-prod.appspot.com/assets/starly-square-logo.jpg"
+                ),
+                mediaType: "image/jpeg"),
+            bannerImage: MetadataViews.Media(
+                file: MetadataViews.HTTPFile(
+                    url: "https://storage.googleapis.com/starly-prod.appspot.com/assets/starly-banner.jpg"
+                ),
+                mediaType: "image/jpeg"),
+            socials: {
+                "twitter": MetadataViews.ExternalURL("https://twitter.com/StarlyNFT"),
+                "discord": MetadataViews.ExternalURL("https://discord.gg/starly"),
+                "medium": MetadataViews.ExternalURL("https://medium.com/@StarlyNFT")
+            }
+        )
     }
 
     pub fun getCardEdition(starlyID: String): StarlyMetadataViews.CardEdition? {
